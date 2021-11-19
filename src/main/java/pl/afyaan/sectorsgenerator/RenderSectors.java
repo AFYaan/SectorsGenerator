@@ -31,8 +31,8 @@ public class RenderSectors {
     }
 
     public void renderSpawn(){
-        Point p1 = world.getSpawn().point1;
-        Point p2 = world.getSpawn().point2;
+        Point p1 = world.getSpawn().getPoint1();
+        Point p2 = world.getSpawn().getPoint2();
         glPushMatrix();
         glColor3d(1, 1, 1);
         glBegin(GL_LINE_LOOP);
@@ -60,8 +60,8 @@ public class RenderSectors {
 
     public void renderSectors(){
         for(Sector sector : world.getSectors()){
-            Point p1 = sector.point1;
-            Point p2 = sector.point2;
+            Point p1 = sector.getPoint1();
+            Point p2 = sector.getPoint2();
             glPushMatrix();
             glColor3d(1, 1, 1);
             glBegin(GL_LINE_LOOP);

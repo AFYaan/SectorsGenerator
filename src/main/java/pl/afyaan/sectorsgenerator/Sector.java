@@ -6,15 +6,25 @@ package pl.afyaan.sectorsgenerator;
  * @project SectorsGenerator
  */
 public class Sector {
-    public Point point1; //-+
-    public Point point2; //+-
+    private String name;
+    private Point point1; //-+
+    private Point point2; //+-
 
     public Sector() {
     }
 
-    public Sector(Point point1, Point point2) {
+    public Sector(String name, Point point1, Point point2) {
+        this.name = name;
         this.point1 = point1;
         this.point2 = point2;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Point getPoint1() {

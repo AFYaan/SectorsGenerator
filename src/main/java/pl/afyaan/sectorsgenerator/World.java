@@ -1,7 +1,12 @@
 package pl.afyaan.sectorsgenerator;
 
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author AFYaan
@@ -12,17 +17,17 @@ public class World {
     private int worldSize;
     private int spawnSize;
     private Sector spawn;
-    public List<Sector> sectors = new ArrayList<>();
+    private List<Sector> sectors = new CopyOnWriteArrayList<>();
     private Size sectorSize;
     private int sectorsInRow;
 
     public World(int worldSize, int spawnSize, int sectorsInRow) {
         this.worldSize = worldSize;
         this.spawnSize = spawnSize;
-        this.spawn = new Sector(new Point(-spawnSize, spawnSize), new Point(spawnSize, -spawnSize));
+        this.spawn = new Sector("Spawn", new Point(-spawnSize, spawnSize), new Point(spawnSize, -spawnSize));
         this.sectorsInRow = sectorsInRow;
         this.sectorSize = calculateSectorSize();
-        recalculateSectors();
+        new Thread(this::recalculateSectors).start();
     }
 
     private Size calculateSectorSize(){
@@ -39,15 +44,14 @@ public class World {
 
         System.out.println("Generated sectors: " + sectors.size());
 
-        int i = 1;
-        Thread thread = new Thread(()->{
-            for(Sector sector : sectors){
-                System.out.println("(s" + i + ")");
-                System.out.println("    (Point1)\n  X: " + sector.point1.getX() + "\n   Z: " + sector.point1.getZ());
-                System.out.println("    (Point2)\n  X: " + sector.point2.getX() + "\n   Z: " + sector.point2.getZ());
-            }
-        });
-        //thread.start();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonElement sectorsElement = gson.toJsonTree(sectors, new TypeToken<List<Sector>>(){}.getType());
+
+        JsonObject sectorsSettings = new JsonObject();
+        sectorsSettings.add("spawn", gson.fromJson(gson.toJson(spawn), JsonObject.class));
+        sectorsSettings.add("sectors", sectorsElement);
+
+        System.out.println(gson.toJson(sectorsSettings));
     }
 
     private void recalculateWideSectors(int xStart, int zStart){
@@ -55,7 +59,7 @@ public class World {
         int z = zStart;
         for(int j = 0; j < sectorsInRow / 2; j++) {
             for (int i = 0; i < sectorsInRow; i++) {
-                Sector sector = new Sector(new Point(x, z), new Point(x + sectorSize.getWidth(), z - sectorSize.getHeight()));
+                Sector sector = new Sector("s" + (sectors.size() + 1), new Point(x, z), new Point(x + sectorSize.getWidth(), z - sectorSize.getHeight()));
                 sectors.add(sector);
 
                 z -= sectorSize.getHeight();
@@ -70,7 +74,7 @@ public class World {
         int z = zStart;
         for(int j = 0; j < sectorsInRow / 2; j++) {
             for (int i = 0; i < sectorsInRow; i++) {
-                Sector sector = new Sector(new Point(x, z), new Point(x + sectorSize.getHeight(), z - sectorSize.getWidth()));
+                Sector sector = new Sector("s" + (sectors.size() + 1),new Point(x, z), new Point(x + sectorSize.getHeight(), z - sectorSize.getWidth()));
                 sectors.add(sector);
 
                 x += sectorSize.getHeight();
