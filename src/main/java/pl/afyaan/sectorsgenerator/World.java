@@ -24,7 +24,7 @@ public class World {
     public World(int worldSize, int spawnSize, int sectorsInRow) {
         this.worldSize = worldSize;
         this.spawnSize = spawnSize;
-        this.spawn = new Sector("Spawn", new Point(-spawnSize, spawnSize), new Point(spawnSize, -spawnSize));
+        this.spawn = new Sector("spawn", new Point(-spawnSize, spawnSize), new Point(spawnSize, -spawnSize));
         this.sectorsInRow = sectorsInRow;
         this.sectorSize = calculateSectorSize();
         new Thread(this::recalculateSectors).start();
@@ -59,7 +59,7 @@ public class World {
         int z = zStart;
         for(int j = 0; j < sectorsInRow / 2; j++) {
             for (int i = 0; i < sectorsInRow; i++) {
-                Sector sector = new Sector("s" + (sectors.size() + 1), new Point(x, z), new Point(x + sectorSize.getWidth(), z - sectorSize.getHeight()));
+                Sector sector = new Sector("sektor_" + (sectors.size() + 1), new Point(x, z), new Point(x + sectorSize.getWidth(), z - sectorSize.getHeight()));
                 sectors.add(sector);
 
                 z -= sectorSize.getHeight();
@@ -74,7 +74,7 @@ public class World {
         int z = zStart;
         for(int j = 0; j < sectorsInRow / 2; j++) {
             for (int i = 0; i < sectorsInRow; i++) {
-                Sector sector = new Sector("s" + (sectors.size() + 1),new Point(x, z), new Point(x + sectorSize.getHeight(), z - sectorSize.getWidth()));
+                Sector sector = new Sector("sektor_" + (sectors.size() + 1),new Point(x, z), new Point(x + sectorSize.getHeight(), z - sectorSize.getWidth()));
                 sectors.add(sector);
 
                 x += sectorSize.getHeight();

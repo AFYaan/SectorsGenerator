@@ -9,7 +9,7 @@ public class App {
     public static SectorsGenerator sectorsGenerator;
 
     public static void main(String[] args) {
-        World world = new World(6000, 300, 4);
+        World world = new World(3000, 500, 2);
         sectorsGenerator = new SectorsGenerator(1366, 900, world);
         sectorsGenerator.run();
     }
